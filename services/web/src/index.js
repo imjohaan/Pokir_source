@@ -12,15 +12,12 @@ const apiSitesToSkip = [
     'authsite',
 ];
 
-app.get('/', (req, res, next) => {
-    axios.get(`https://www.roblox.com/`, { maxRedirects: 0, validateStatus: (num) => true })
-        .then(d => {
-            if (typeof d.data === "string") {
-                res.send(replacer(d.data, url)).end();
-            } else {
-                res.send(d.data).end();
-            }
-        })
+const path = require('path');
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
         .catch(next);
 });
 
