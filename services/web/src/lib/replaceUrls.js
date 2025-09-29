@@ -18,3 +18,4 @@ const replacer = (data, newUrl) => {
 }
 
 module.exports = replacer;
+
