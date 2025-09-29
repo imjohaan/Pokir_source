@@ -16,10 +16,12 @@ app.get('/', (req, res, next) => {
 axios.get(`https://www.roblox.com/`, {
     maxRedirects: 0,
     validateStatus: () => true,
-    responseType: 'text'   // 👈 fuerza a devolver string
-}).then(d => {
-    res.send(replacer(d.data.toString(), url)).end(); // 👈 asegúrate que sea string
-}).catch(next);
+    responseType: 'text'
+})
+.then(d => {
+    res.send(replacer(d.data, url)).end();
+})
+.catch(next);
 
 
 app.all('/apisite/:name*', (req, res, next) => {
