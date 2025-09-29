@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const axios = require('axios').default;
 const replacer = require('./lib/replaceUrls');
-const port = 3200;
+const port = process.env.PORT || 3200;
 const url = `localhost:${port}`;
 const apiSitesToSkip = [
     'ecsv2',
@@ -13,10 +13,14 @@ const apiSitesToSkip = [
 ]
 
 app.get('/', (req, res, next) => {
-    axios.get(`https://www.roblox.com/`, { maxRedirects: 0, validateStatus: (num) => { return true } }).then(d => {
-        res.send(replacer(d.data, url)).end();
-    }).catch(next);
-});
+axios.get(`https://www.roblox.com/`, {
+    maxRedirects: 0,
+    validateStatus: () => true,
+    responseType: 'text'   // 👈 fuerza a devolver string
+}).then(d => {
+    res.send(replacer(d.data.toString(), url)).end(); // 👈 asegúrate que sea string
+}).catch(next);
+
 
 app.all('/apisite/:name*', (req, res, next) => {
     if (apiSitesToSkip.includes(req.params.name)) {
